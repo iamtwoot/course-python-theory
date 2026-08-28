@@ -1,11 +1,12 @@
 import asyncio
-import aiohttp
 import json
+
+import aiohttp
 
 urls = [
     "https://example.com",
     "https://httpbin.org/status/404",
-    "https://nonexistent.url"
+    "https://nonexistent.url",
 ]
 
 
@@ -17,17 +18,19 @@ async def fetch_urls(urls: list[str], file_path: str) -> None:
             try:
                 async with session.get(url) as response:
                     status = response.status
-            except (aiohttp.ClientError, asyncio.TimeoutError):
+            except (TimeoutError, aiohttp.ClientError):
                 status = 0
-            return {"url": url, "status_code": status, }
+            return {
+                "url": url,
+                "status_code": status,
+            }
 
     async with aiohttp.ClientSession() as session:
         tasks = [fetch_one(session, url) for url in urls]
         results = await asyncio.gather(*tasks)
 
     with open(file_path, "w") as f:
-        for result in results:
-            f.write(json.dumps(result) + "\n")
+        f.writelines(json.dumps(result) + "\n" for result in results)
 
 
 if __name__ == "__main__":
