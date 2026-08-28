@@ -1,6 +1,6 @@
 import unittest.mock
-from functools import wraps
 from collections import OrderedDict
+from functools import wraps
 
 
 def lru_cache(*args, **kwargs):
@@ -29,7 +29,6 @@ def lru_cache(*args, **kwargs):
     return decorator
 
 
-
 @lru_cache
 def sum(a: int, b: int) -> int:
     return a + b
@@ -45,7 +44,7 @@ def multiply(a: int, b: int) -> int:
     return a * b
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     assert sum(1, 2) == 3
     assert sum(3, 4) == 7
 

@@ -1,9 +1,9 @@
-from datetime import datetime
+from datetime import UTC, datetime
 
 
 class CreatedAtMeta(type):
     def __new__(mcs, name, bases, attrs):
-        attrs.update(created_at=datetime.now())
+        attrs.update(created_at=datetime.now(UTC))
         return super().__new__(mcs, name, bases, attrs)
 
 
@@ -13,5 +13,3 @@ class CreatedAt(metaclass=CreatedAtMeta):
 
 obj = CreatedAt()
 print(obj.created_at)
-
-

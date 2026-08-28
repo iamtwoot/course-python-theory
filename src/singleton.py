@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 # 1. Using __new__
 # class Singleton:
 #     _instance = None
@@ -10,7 +12,7 @@
 
 # 2. Using metaclass
 class SingletonMeta(type):
-    _instances = {}
+    _instances: ClassVar[dict] = {}
 
     def __call__(cls, *args, **kwargs):
         if cls not in cls._instances:
@@ -25,5 +27,5 @@ class Singleton(metaclass=SingletonMeta):
 
 # 3. Using module
 from config_singleton import config
-config.value = "set from singleton.py"
 
+config.value = "set from singleton.py"
