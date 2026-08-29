@@ -26,8 +26,6 @@ async def fetch_urls(url_file_path: str) -> None:
             async with write_lock:
                 await out_file.write(line)
 
-
         async with aiohttp.ClientSession() as session:
             tasks = [fetch_one(session, url) for url in urls]
             await asyncio.gather(*tasks)
-

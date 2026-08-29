@@ -1,6 +1,7 @@
 import asyncio
 import json
 
+import aiofiles
 import aiohttp
 
 urls = [
@@ -29,8 +30,8 @@ async def fetch_urls(urls: list[str], file_path: str) -> None:
         tasks = [fetch_one(session, url) for url in urls]
         results = await asyncio.gather(*tasks)
 
-    with open(file_path, "w") as f:
-        f.writelines(json.dumps(result) + "\n" for result in results)
+    async with aiofiles.open(file_path, "w") as f:
+        await f.writelines(json.dumps(result) + "\n" for result in results)
 
 
 if __name__ == "__main__":

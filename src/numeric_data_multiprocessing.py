@@ -1,9 +1,9 @@
+import json
 import random
 import time
 from concurrent.futures import ThreadPoolExecutor
-from multiprocessing import Pool, cpu_count
-from multiprocessing import Process, Queue
-import json
+from multiprocessing import Pool, Process, Queue, cpu_count
+
 import matplotlib.pyplot as plt
 
 
@@ -27,7 +27,9 @@ def run_sequential(numbers: list[int]) -> tuple[list[int], float]:
 
 
 # 2. Using threading pool with concurrent.futures
-def run_thread_pool(numbers: list[int], max_workers: int = 5) -> tuple[list[int], float]:
+def run_thread_pool(
+    numbers: list[int], max_workers: int = 5
+) -> tuple[list[int], float]:
     start = time.perf_counter()
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         results = list(executor.map(process_number, numbers))
@@ -53,7 +55,7 @@ def get_chunks(numbers: list, n_chunks: int) -> list[list[int]]:
         if i == n_chunks - 1:
             chunk = numbers[position:]
         else:
-            chunk = numbers[position:position + step]
+            chunk = numbers[position : position + step]
         chunks.append(chunk)
         position += step
     return chunks
@@ -94,8 +96,10 @@ def run_process_queue(numbers: list[int]) -> tuple[list[int], float]:
 
 def save_results(numbers: list[int], results: list[int], file_path: str) -> None:
     with open(file_path, "w") as f:
-        for number, result in zip(numbers, results):
-            f.write(json.dumps({"number": number, "factorial": result}) + "\n")
+        f.writelines(
+            json.dumps({"number": number, "factorial": result}) + "\n"
+            for number, result in zip(numbers, results)
+        )
 
 
 def plot_speedup(results_table: list[tuple[str, float]], seq_time: float) -> None:
